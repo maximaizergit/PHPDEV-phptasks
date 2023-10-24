@@ -15,16 +15,39 @@ function getNumJoins($strOfNums, $reqNum):int {
     return $joins;
 }
 
-echo "Введите строку чисел: ";
-$strOfNums = fgets(STDIN);
-echo "Введите искомую цифру: ";
-$reqNum = fgets(STDIN);
+$result = '';
 
-if (is_numeric($strOfNums) && is_numeric($reqNum) && ($reqNum >= 0 && $reqNum <= 9)) {
-    echo getNumJoins($strOfNums, $reqNum);
-} else {
-    echo "Неверные данные!";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $strOfNums = $_POST['strOfNums'];
+    $reqNum = $_POST['reqNum'];
+    
+    if (is_numeric($strOfNums) && is_numeric($reqNum) && ($reqNum >= 0 && $reqNum <= 9)) {
+        $result = getNumJoins($strOfNums, $reqNum);
+    } else {
+        $result = "Неверные данные!";
+    }
 }
-
 ?>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Число повторений</title>
+</head>
+<body>
+    <form method="post">
+        <label for="strOfNums">Введите строку чисел:</label>
+        <input type="text" name="strOfNums" id="strOfNums">
+        <br>
+        <label for="reqNum">Введите искомую цифру:</label>
+        <input type="text" name="reqNum" id="reqNum">
+        <br>
+        <input type="submit" value="Посчитать">
+    </form>
+
+    <?php if (!empty($result)): ?>
+        <p>Результат: <?php echo $result; ?></p>
+    <?php endif; ?>
+</body>
+</html>
